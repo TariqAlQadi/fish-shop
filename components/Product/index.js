@@ -16,11 +16,14 @@ export default function Product() {
   const router = useRouter();
   const { id } = router.query;
 
+  //fetch der id
   const { data } = useSWR(id ? `/api/products/${id}` : null);
 
   if (!data) {
     return <h1>Loading...</h1>;
   }
+
+  //delete
   function handleDelete() {
     try {
       const response = fetch(`/api/products/${id}`, { method: "DELETE" });
@@ -28,10 +31,12 @@ export default function Product() {
       console.error(error);
     }
   }
+
+  //edit
   function handleEdit(event) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
-    console.log(data);
+
     try {
       const response = fetch(`/api/products/${id}`, {
         method: "PUT",
@@ -48,9 +53,11 @@ export default function Product() {
       console.error(error);
     }
   }
+
   function handleToggleIsEditing() {
     setIsEditing(!isEditing);
   }
+
   return (
     <ProductCard>
       <h2>{data.name}</h2>
